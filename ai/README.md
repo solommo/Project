@@ -1,140 +1,113 @@
-# focus_platform_ai
+# 🧠 Focus Platform — AI Service (Flask + LSTM)
 
-This folder contains the AI components for the Focus platform — data preprocessing, model training, prediction utilities, and a small Flask prediction API.
+This folder contains the deep-learning AI components of the Focus Platform, including knowledge tracing models, preprocessing utilities, and the prediction API server.
 
-## Layout
+---
 
-- `createTests.py` — helper to run quick smoke tests
-- `predict.py` — convenience script for running an ad-hoc prediction
-- `requirements.txt` — Python dependencies
-- `api/ai_api.py` — Flask API (endpoints: `/health`, `/predict`)
-- `preprocessing/` — data preprocessing scripts
-- `training/` — training scripts and helpers
-- `prediction/` — production-oriented prediction helpers
-- `models/` — trained model artifacts (expected: `evaluate_skill_model_vFINAL.pkl`)
-- `data/` — sample and raw data files
-- `analysis/` — plotting / evaluation utilities
+## 🧭 Service Overview
 
-## Requirements
+*   **Host/Port**: `http://127.0.0.1:5000`
+*   **Core Model**: `models/lstm_knowledge_tracing_model.h5`
+*   **Framework**: Flask + TensorFlow (Keras LSTM)
 
-- Python 3.8+
-- See `requirements.txt` for Python packages. Key packages used:
-  - `flask`, `joblib`, `lightgbm`, `numpy`, `pandas`, `scikit-learn`, `matplotlib`
+The AI service tracks student progress over sequence attempts and estimates their mastery score of a skill using dynamic knowledge tracing.
 
-### Packages to install
+---
 
-Install all required packages from `requirements.txt` (recommended):
+## 📂 Project Layout
 
-```bash
-pip install -r requirements.txt
-```
+*   `api/ai_api.py` — Flask API controller (Endpoints: `/health`, `/predict`).
+*   `models/` — Contains the pre-trained `lstm_knowledge_tracing_model.h5` deep learning file.
+*   `preprocessing/` — Scripts for preparing training snapshots and feature datasets.
+*   `training/` — Python scripts to train and evaluate models.
+*   `prediction/` — Internal helper modules for prediction algorithms.
+*   `data/` — Evaluation dataset folders.
+*   `requirements.txt` — PIP dependency list.
 
-Or install the core packages individually:
+---
 
-```bash
-pip install flask joblib lightgbm numpy pandas scikit-learn matplotlib
-```
+## 🛠️ Step-by-Step Execution
 
-## Quick setup
+To avoid system dependency conflicts and missing packages (such as `ModuleNotFoundError: No module named 'tensorflow'`), **always run the service inside the virtual environment**.
 
-1. Create and activate a virtual environment (recommended):
+### 1. Set Up and Activate the Virtual Environment
 
-Windows (PowerShell):
+Open a terminal at the `ai` folder:
 
+*   **Windows (PowerShell)**:
+    ```powershell
+    # 1. Create virtual environment (only needed once)
+    python -m venv .venv
+
+    # 2. Activate virtual environment
+    .\.venv\Scripts\Activate.ps1
+
+    # 3. Install packages
+    pip install -r requirements.txt
+    ```
+
+*   **macOS / Linux**:
+    ```bash
+    # 1. Create virtual environment (only needed once)
+    python3 -m venv .venv
+
+    # 2. Activate virtual environment
+    source .venv/bin/activate
+
+    # 3. Install packages
+    pip install -r requirements.txt
+    ```
+
+---
+
+### 2. Start the API Server
+
+#### Option A: Inside your active virtual environment terminal
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-```
-
-macOS / Linux:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-2. Prepare data
-
-- Place your training / input CSV files under the `data/` directory. A common file used by the pipeline is `final_processed_data.csv` (or the provided sample files).
-
-3. Edit configuration (if needed)
-
-- Review training and preprocessing scripts for any hard-coded paths. Most scripts expect relative paths from the `focus_platform_ai` folder.
-
-## Common workflows
-
-Preprocess data:
-
-```bash
-python preprocessing/preprocess.py
-```
-
-Build skill snapshots from ordered student answers and skill difficulty values:
-
-```bash
-python preprocessing/skill_snapshot_smoke_test.py
-```
-
-Train a model (example):
-
-```bash
-python training/train.py
-```
-
-Run a local ad-hoc prediction using the convenience script:
-
-```bash
-python predict.py "path/to/example_input.json"
-```
-
-Run the production-style prediction script in `prediction/` (if provided):
-
-```bash
-python prediction/predict.py --input data/some_input.csv --output predictions.csv
-```
-
-Run tests / quick checks:
-
-```bash
-python createTests.py
-```
-
-## Flask API (prediction)
-
-The API is a small Flask app in `api/ai_api.py`. It attempts to load a model bundle from `models/` (the code expects a file like `evaluate_skill_model_vFINAL.pkl`).
-
-Start the API (development):
-
-```bash
 python api/ai_api.py
 ```
 
-By default the server listens on port `5000`. Endpoints:
-
-- `GET /health` — returns model load status and feature/threshold info
-- `POST /predict` — accepts either prebuilt feature rows or raw ordered student answers plus `skills_difficulty`; returns probability and status per skill
-
-Example `curl` request:
-
-```bash
-curl -X POST http://127.0.0.1:5000/predict \
-	-H "Content-Type: application/json" \
-	-d '{"items":[{"order_id":1,"skill_id":456,"is_correct":1},{"order_id":2,"skill_id":456,"is_correct":0}],"skills_difficulty":{"456":0.35}}'
+#### Option B: Direct Execution without manual activation (Robust for PowerShell)
+```powershell
+.\.venv\Scripts\python.exe api/ai_api.py
 ```
 
-## Model artifacts
+*The service is ready when you see: ` [SUCCESS] LSTM Knowledge Tracing Model Loaded Successfully!` and `* Running on http://127.0.0.1:5000`.*
 
-- Trained models (joblib bundles) should be placed in `models/` and include at least the serialized model and metadata keys used by `api/ai_api.py` (e.g. `model`, `features`, `threshold`). The API tries `evaluate_skill_model_vFINAL.pkl` by default.
+---
 
-## Notes & troubleshooting
+## 📡 API Reference
 
-- If the API reports "model load failed", confirm that the expected file exists in `models/` and is a joblib bundle with the expected keys.
-- Use `pip install -r requirements.txt` inside the activated virtualenv to avoid system package conflicts.
-- For large training runs, prefer running on a machine with sufficient memory and consider using smaller sample data for quick iterations.
+### 1. Health Probe (`GET http://127.0.0.1:5000/health`)
+Checks if the deep learning model loaded successfully.
 
-## Contributing
+*   **Response**:
+    ```json
+    {
+        "status": "healthy",
+        "model_loaded": true,
+        "framework": "TensorFlow (Keras LSTM)"
+    }
+    ```
 
-- Add new preprocessing transformations under `preprocessing/`.
-- Keep models in `models/` and name them clearly with version tags.
+### 2. Predict Mastery (`POST http://127.0.0.1:5000/predict`)
+Estimates knowledge mastery for a student given their history sequence and skill difficulty.
+
+*   **Request Payload**:
+    ```json
+    {
+        "student_history": [1, 1, 0, 1],
+        "skill_difficulty_avg": 0.40
+    }
+    ```
+*   **Response Payload**:
+    ```json
+    {
+        "mastery_score": 71.59,
+        "skill_id": "",
+        "skill_name": "Unknown Skill",
+        "status": "Developing (On Track)",
+        "total_attempts": 4,
+        "total_correct": 3
+    }
+    ```

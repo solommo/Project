@@ -1,146 +1,74 @@
-# focus_platform — Backend (Laravel)
+# 🐘 Focus Platform — Laravel Backend API
 
-This repository contains the backend (Laravel) for the Focus platform. This README focuses on setting up and running the backend locally on Windows (XAMPP) or a Unix-like environment.
-
-**Quick links:**
-
-- API reference: [API_Routes.md](API_Routes.md)
-
-## Prerequisites
-
-- PHP 8.0+
-- Composer
-- MySQL (or MariaDB)
-- Git
-- Optional: Node.js (for compiling frontend assets)
-
-On Windows, using XAMPP is supported — ensure MySQL and Apache (if needed) are running.
-
-## Quick Setup (Windows / XAMPP)
-
-1. Clone the repository and enter it:
-
-```powershell
-git clone https://github.com/Abdalla-Ahmed-2004/focus_platform.git
-cd "focus_platform"
-```
-
-2. Install PHP dependencies:
-
-```powershell
-composer install
-```
-
-3. Copy the example environment and update values:
-
-```powershell
-copy .env.example .env
-# Edit .env with your DB credentials and APP_URL (use an editor)
-```
-
-Important `.env` values:
-
-- `APP_URL` — e.g. `http://127.0.0.1:8000`
-- `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
-
-4. Generate keys:
-
-```powershell
-php artisan key:generate
-php artisan jwt:secret
-```
-
-5. Create the database (via phpMyAdmin or MySQL CLI) and run migrations + seeders:
-
-```powershell
-php artisan migrate --seed
-```
-
-6. (Optional) Install Node dependencies and build assets:
-
-```powershell
-npm install
-npm run dev
-```
-
-7. Start the development server:
-
-```powershell
-php artisan serve
-```
-
-The API will be available at `http://127.0.0.1:8000/api` by default.
-
-## Environment / Permissions
-
-On Linux/macOS, ensure writable directories:
-
-```bash
-chmod -R 775 storage bootstrap/cache
-```
-
-## Testing & Debugging
-
-- Clear caches if you run into configuration issues:
-
-```bash
-php artisan config:clear
-php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
-```
-
-## Packages Used
-
-- `tymon/jwt-auth` — JWT authentication (generate secret with `php artisan jwt:secret`)
-- `spatie/laravel-permission` — Role & permission management
-
-## API Reference
-
-See [API_Routes.md](API_Routes.md) for a current list of endpoints, required roles, and example payloads.
-
-## Contributing
-
-- Create a feature branch, run tests (if available), and open a PR with a clear description.
+This repository contains the REST API backend built on Laravel for the Focus Platform. It serves academic curriculums, handles user authentication, tracks quiz attempts, and interfaces with the Flask AI model.
 
 ---
 
-If you want, I can also add a minimal Postman collection or example curl commands — tell me which format you prefer.
+## 🧭 Service Overview
+
+*   **Host/Port**: `http://127.0.0.1:8000` (Endpoints: `/api/*`)
+*   **Database**: SQLite (`database/database.sqlite`)
+*   **Key Dependencies**: `tymon/jwt-auth` for authentication, `spatie/laravel-permission` for ACL.
 
 ---
 
-## Quick run (copy-paste)
+## 📂 Project Layout
 
-Use the following commands in order to set up and run the backend locally. Adjust `.env` values (DB credentials, APP_URL) before running migrations.
+*   `app/Http/Controllers/` — API controllers including user dashboard, chat logs, and teacher verification.
+*   `app/Models/` — Data models (User, Student, Teacher, Subject, Unit, Lesson, Quiz, Question).
+*   `routes/api.php` & `routes/api/` — Structured and decoupled API routes.
+*   `database/database.sqlite` — Local file-based database.
+*   `database/migrations/` — Database schema files.
+*   `database/seeders/` — Seeding scripts, including `MahmoudMagdySeeder` for demo credentials.
 
-Windows (PowerShell):
+---
 
+## 🛠️ Step-by-Step Execution
+
+### 1. Install PHP & Composer Packages
+Open a terminal at the `backend` directory and run:
 ```powershell
-git clone https://github.com/Abdalla-Ahmed-2004/focus_platform.git
-cd "focus_platform"
 composer install
-copy .env.example .env
-# Edit .env to set DB_* and APP_URL
-php artisan key:generate
-php artisan jwt:secret
-php artisan migrate --seed
-npm install
-npm run dev
-php artisan serve
 ```
 
-Unix / macOS (bash):
+### 2. Set Up the Environment
+1.  Copy the environment template:
+    ```powershell
+    copy .env.example .env
+    ```
+2.  Configure database variables in `.env` to target **SQLite**:
+    ```env
+    DB_CONNECTION=sqlite
+    # Comment out DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
+    ```
 
-```bash
-git clone https://github.com/Abdalla-Ahmed-2004/focus_platform.git
-cd focus_platform
-composer install
-cp .env.example .env
-# Edit .env to set DB_* and APP_URL
+### 3. Initialize Keys & Database
+Generate your application cryptographic keys, JWT secret keys, and seed the SQLite database file:
+```powershell
+# Generate keys
 php artisan key:generate
 php artisan jwt:secret
-php artisan migrate --seed
-npm install
-npm run dev
+
+# Initialize SQLite database file (ensure database/database.sqlite is empty, 0-bytes)
+# Run migrations and seed data
+php artisan migrate:fresh --seed
+```
+
+### 4. Run the Dev API Server
+Start Laravel's built-in serving utility:
+```powershell
 php artisan serve
 ```
+*The API is now active at `http://127.0.0.1:8000/api`.*
+
+---
+
+## 🔑 Demo login credentials
+
+The database seeding initializes a fully populated system with mock courses, questions, and accounts. You can immediately log into the system with the default teacher account:
+
+*   **Role**: Teacher
+*   **Email**: `magdy@gmail.com`
+*   **Password**: `password`
+
+*Note: All auto-generated mock student and teacher accounts created by Laravel factories also share the default password: `password`.*
