@@ -1,0 +1,32 @@
+# Root GitIgnore for Focus Project
+
+# Python / AI Environment
+ai/.venv/
+ai/__pycache__/
+ai/*.pyc
+
+# Node Modules & Frontend builds
+frontent/node_modules/
+frontent/dist/
+frontent/dist-ssr/
+frontent/*.local
+frontent/.env
+
+# Composer & Backend builds
+backend/vendor/
+backend/node_modules/
+backend/public/build
+backend/public/hot
+backend/public/storage
+backend/storage/*.key
+backend/storage/pail
+backend/.env
+backend/.env.backup
+backend/.env.production
+backend/database/database.sqlite
+
+# System / Editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
