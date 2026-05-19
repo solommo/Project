@@ -7,7 +7,7 @@ This repository contains the REST API backend built on Laravel for the Focus Pla
 ## 🧭 Service Overview
 
 *   **Host/Port**: `http://127.0.0.1:8000` (Endpoints: `/api/*`)
-*   **Database**: SQLite (`database/database.sqlite`)
+*   **Database**: MySQL (`focus_platform`)
 *   **Key Dependencies**: `tymon/jwt-auth` for authentication, `spatie/laravel-permission` for ACL.
 
 ---
@@ -17,7 +17,7 @@ This repository contains the REST API backend built on Laravel for the Focus Pla
 *   `app/Http/Controllers/` — API controllers including user dashboard, chat logs, and teacher verification.
 *   `app/Models/` — Data models (User, Student, Teacher, Subject, Unit, Lesson, Quiz, Question).
 *   `routes/api.php` & `routes/api/` — Structured and decoupled API routes.
-*   `database/database.sqlite` — Local file-based database.
+*   `setup_db.php` — Helper script that creates the MySQL database and runs migrations.
 *   `database/migrations/` — Database schema files.
 *   `database/seeders/` — Seeding scripts, including `MahmoudMagdySeeder` for demo credentials.
 
@@ -36,22 +36,20 @@ composer install
     ```powershell
     copy .env.example .env
     ```
-2.  Configure database variables in `.env` to target **SQLite**:
-    ```env
-    DB_CONNECTION=sqlite
-    # Comment out DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
-    ```
+2.  Confirm the MySQL variables in `.env` match your local setup (defaults in `.env.example` target `focus_platform` on `127.0.0.1:3306` with `root` and an empty password).
 
 ### 3. Initialize Keys & Database
-Generate your application cryptographic keys, JWT secret keys, and seed the SQLite database file:
+Generate your application cryptographic keys, JWT secret keys, and seed the MySQL database:
 ```powershell
 # Generate keys
 php artisan key:generate
 php artisan jwt:secret
 
-# Initialize SQLite database file (ensure database/database.sqlite is empty, 0-bytes)
-# Run migrations and seed data
-php artisan migrate:fresh --seed
+# Create the database and run migrations/seeders
+php setup_db.php
+
+# (Optional manual flow) Create the database yourself, then run:
+# php artisan migrate --seed
 ```
 
 ### 4. Run the Dev API Server

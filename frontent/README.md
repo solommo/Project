@@ -1,13 +1,13 @@
 # ⚛️ Focus Platform — React Frontend UI
 
-This folder contains the frontend user interface for the Focus Platform, built using React, Vite, and tailwind styling. It provides premium dark-mode dashboard interfaces for administrators, students, and teachers.
+This folder contains the frontend user interface for the Focus Platform, built using React, Vite, and Tailwind CSS. It provides premium dark-mode dashboard interfaces for administrators, students, and teachers.
 
 ---
 
 ## 🧭 Service Overview
 
 *   **Host/Port**: `http://localhost:5173`
-*   **Framework**: React 18 + Vite 7
+*   **Framework**: React 19 + Vite 7
 *   **Key Modules**: Gemini Socratic Chat Integration, Interactive Curriculum Progress, Admin Verification panels, and Student Analytics charts.
 
 ---
