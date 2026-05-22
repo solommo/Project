@@ -42,9 +42,9 @@ graph TD
 
 The project is structured into three self-contained directories:
 
-*   **[`/frontent`](file:///c:/Users/SOLOM/Desktop/Project/frontent)**: The web application interface. Built with **React 19**, **Vite 7**, **Tailwind CSS**, and **Framer Motion** for premium interactive animations. It uses **Lucide React** for icons and **Recharts** for student progress visualization.
-*   **[`/backend`](file:///c:/Users/SOLOM/Desktop/Project/backend)**: The core API server. Built with **Laravel 11**, using **JWT-Auth** for secure session management and **Spatie Laravel Permission** for role management (Students, Teachers, Admins). It includes database migrations and robust seeders.
-*   **[`/ai`](file:///c:/Users/SOLOM/Desktop/Project/ai)**: The machine learning component. Built with **Flask**, **TensorFlow/Keras**, **Pandas**, and **Scikit-Learn**. It loads a trained LSTM weights bundle (`.h5`) to perform Real-Time Socratic Knowledge Tracing.
+*   **[`/frontent`](./frontent)**: The web application interface. Built with **React 19**, **Vite 7**, **Tailwind CSS**, and **Framer Motion** for premium interactive animations. It uses **Lucide React** for icons and **Recharts** for student progress visualization.
+*   **[`/backend`](./backend)**: The core API server. Built with **Laravel 12**, using **JWT-Auth** for secure session management and **Spatie Laravel Permission** for role management (Students, Teachers, Admins). It includes database migrations and robust seeders.
+*   **[`/ai`](./ai)**: The machine learning component. Built with **Flask**, **TensorFlow/Keras**, **Pandas**, and **Scikit-Learn**. It loads a trained LSTM weights bundle (`.h5`) to perform Real-Time Socratic Knowledge Tracing.
 
 ---
 
@@ -53,14 +53,14 @@ The project is structured into three self-contained directories:
 | Component | Key Technologies |
 | :--- | :--- |
 | **Frontend** | React 19, Vite 7, Tailwind CSS, Framer Motion, Axios, Recharts, i18next |
-| **Backend** | PHP 8.2+, Laravel 11, JWT-Auth, Spatie Permissions, MySQL |
+| **Backend** | PHP 8.2+, Laravel 12, JWT-Auth, Spatie Permissions, MySQL |
 | **AI Model** | Python 3.13, TensorFlow 2.11+, Flask, Pandas, Joblib, Scikit-Learn |
 
 ---
 
 ## 🚀 Quickstart Guide
 
-To configure, migrate, seed, and run all services in a few simple steps, refer to our unified **[QUICKSTART.md](file:///c:/Users/SOLOM/Desktop/Project/QUICKSTART.md)** guide.
+To configure, migrate, seed, and run all services in a few simple steps, refer to our unified **[QUICKSTART.md](./QUICKSTART.md)** guide.
 
 ---
 

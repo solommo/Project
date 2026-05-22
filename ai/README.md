@@ -78,19 +78,7 @@ python api/ai_api.py
 
 ## 📡 API Reference
 
-### 1. Health Probe (`GET http://127.0.0.1:5000/health`)
-Checks if the deep learning model loaded successfully.
-
-*   **Response**:
-    ```json
-    {
-        "status": "healthy",
-        "model_loaded": true,
-        "framework": "TensorFlow (Keras LSTM)"
-    }
-    ```
-
-### 2. Predict Mastery (`POST http://127.0.0.1:5000/predict`)
+### 1. Predict Mastery (`POST http://127.0.0.1:5000/predict`)
 Estimates knowledge mastery for a student given their history sequence and skill difficulty.
 
 *   **Request Payload**:
